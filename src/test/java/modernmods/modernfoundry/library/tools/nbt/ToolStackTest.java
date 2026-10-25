@@ -41,6 +41,39 @@ class ToolStackTest extends ToolItemTest {
     TagUtil.setTag(stack, tag);
   }
 
+  @Test
+  void persistentAmmoSurvivesAnotherToolViewAndReload() {
+    var key = modernmods.modernfoundry.library.tools.item.ranged.ModifiableCrossbowItem.KEY_CROSSBOW_AMMO;
+    ToolStack tool = ToolStack.from(testItemStack);
+    CompoundTag ammo = TagUtil.saveItem(new ItemStack(Items.ARROW, 3), new CompoundTag());
+    tool.getPersistentData().put(key, ammo);
+    assertThat(TagUtil.readItem(ToolStack.from(testItemStack).getPersistentData().getCompound(key)).getCount()).isEqualTo(3);
+    assertThat(tool.getPersistentData().getCompound(key)).isEqualTo(ammo);
+    tool.getPersistentData().remove(key);
+    assertThat(ToolStack.from(testItemStack).getPersistentData().contains(key)).isFalse();
+  }
+
+  @Test
+  void durabilityShieldIsConsumedBeforeDurabilityAndStaysConsumed() {
+    var key = modernmods.modernfoundry.TConstruct.getResource("overslime");
+    ToolStack tool = ToolStack.from(testItemStack);
+    tool.getPersistentData().putInt(key, 2);
+    var bar = org.mockito.Mockito.mock(modernmods.modernfoundry.library.modifiers.hook.special.CapacityBarHook.class);
+    org.mockito.Mockito.when(bar.getAmount(org.mockito.ArgumentMatchers.any())).thenAnswer(call ->
+      ((IToolStackView)call.getArgument(0)).getPersistentData().getInt(key));
+    org.mockito.Mockito.doAnswer(call -> {
+      ((IToolStackView)call.getArgument(0)).getPersistentData().putInt(key, call.getArgument(2));
+      return null;
+    }).when(bar).setAmount(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.anyInt());
+    var entry = modernmods.modernfoundry.library.modifiers.ModifierEntry.EMPTY;
+    assertThat(modernmods.modernfoundry.library.modifiers.modules.capacity.DurabilityShieldModule.onDamageTool(bar, tool, entry, 1, 1)).isZero();
+    ToolStack next = ToolStack.from(testItemStack);
+    assertThat(next.getPersistentData().getInt(key)).isEqualTo(1);
+    assertThat(modernmods.modernfoundry.library.modifiers.modules.capacity.DurabilityShieldModule.onDamageTool(bar, next, entry, 3, 1)).isEqualTo(2);
+    assertThat(ToolStack.from(testItemStack).getPersistentData().getInt(key)).isZero();
+    assertThat(modernmods.modernfoundry.library.modifiers.modules.capacity.DurabilityShieldModule.onDamageTool(bar, ToolStack.from(testItemStack), entry, 1, 1)).isEqualTo(1);
+  }
+
   /* From */
 
   @Test

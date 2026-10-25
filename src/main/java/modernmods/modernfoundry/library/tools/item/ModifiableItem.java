@@ -536,11 +536,7 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
         instanceof BoxAOEIterator box
         && box.getModes(tool).size() > 1) {
       tooltip.add(Component.translatable("tooltip.modernfoundry.aoe_switch").withStyle(ChatFormatting.GRAY));
-      var selected = box.getSelectedMode(tool);
-      for (var mode : box.getModes(tool)) {
-        tooltip.add(Component.literal(mode.label()).withStyle(mode.equals(selected)
-          ? ChatFormatting.GREEN : ChatFormatting.GRAY));
-      }
+      tooltip.add(box.getModeTooltip(tool));
     }
   }
 

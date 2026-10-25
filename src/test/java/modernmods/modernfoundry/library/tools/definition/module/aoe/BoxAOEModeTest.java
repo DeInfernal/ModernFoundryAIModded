@@ -13,6 +13,19 @@ import static org.mockito.Mockito.*;
 
 class BoxAOEModeTest {
   @Test
+  void modesUseOneCommaSeparatedRowWithIndependentColors() {
+    var box = BoxAOEIterator.builder(1, 1, 0).build();
+    var tool = mock(ToolStack.class);
+    when(tool.getPersistentData()).thenReturn(new ToolDataNBT());
+    when(tool.getVolatileData()).thenReturn(new ModDataNBT());
+    var row = box.getModeTooltip(tool);
+    assertThat(row.getString()).isEqualTo("1×1, 1×2, 3×3");
+    assertThat(row.getSiblings()).hasSize(5);
+    assertThat(row.getSiblings().get(0).getStyle().getColor().getValue()).isEqualTo(0xAAAAAA);
+    assertThat(row.getSiblings().get(4).getStyle().getColor().getValue()).isEqualTo(0x55FF55);
+  }
+
+  @Test
   void modesPersistPerToolAndTrackUpgrades() {
     var box = BoxAOEIterator.builder(1, 1, 0).addWidth(1).addHeight(1).build();
     var tool = mock(ToolStack.class);

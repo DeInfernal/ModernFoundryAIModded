@@ -1957,3 +1957,55 @@
 **Build / Validation**
 - Reused the successful build and 198 passing tests recorded above; executable JAR SHA-256 rechecked as 6bcf3647eedc196af64c0a69bf326595accf1ff39653fb0b3d62b6fbfafc8c22.
 - git diff --check passed. Remote publication will be verified after push/upload.
+
+## 2026-10-25 - Fix crossbow charges, Overslime, loot integration, casting drops and AOE tooltip
+
+**Prompt / Task**
+- Repair six reported gameplay/UI regressions and prepare a new build.
+
+**What Changed**
+- Added write-through notifications to mutable modifier-data wrappers, bound to ToolStack's source ItemStack custom-data component. Charge insertion/removal and shield depletion are now persisted immediately.
+- Added NeoForge's missing global loot modifier list with the existing wither_bone and modifier_hook handlers. Kept recipe chances, bone counts and the witherBoneDrop configuration unchanged.
+- Casting block removal drops the actual complete Container and clears it before Hilt's capability-based removal path, preventing loss when capabilities are missing or restricted and preventing duplicate drops.
+- Consolidated AOE size segments into one component with comma separators, keeping per-mode colors.
+- Incremented mod_version to 4.1.9.
+
+**Steps Taken**
+- Read TASK.md (empty), repository instructions, projectile loading/firing, shield damage logic, global loot descriptors, NeoForge's LootModifierManager source and Hilt's removal bytecode.
+- Reproduced the persistence regressions before fixes: the charge round-trip expected 3 arrows but read 0; the shield absorption test returned durability damage instead of consuming its saved shield.
+- Kept generated resources and Hilt artifacts unchanged.
+
+**Architecture / Module Ownership**
+- Systems: ToolStack/ModDataNBT persistence, smeltery block inventory lifecycle, common loot integration, AOE tooltip.
+- Existing logic reused: shield absorption math, crossbow ammo encoding/firing, loot codecs and drop recipes, vanilla Containers.dropContents, existing mode list.
+- New files: NeoForge global loot list, casting removal and global loot registration regression tests.
+- Build files updated: gradle.properties (version only).
+
+**Rationale / Tradeoffs**
+- Fix persistence at its common source instead of separately patching every charge/shield call site.
+- Retain detached/copy tool semantics; callback notifications apply only to views bound to a source stack.
+- Direct container removal avoids dependency on sided automation handlers. Interactive gameplay still requires in-game validation.
+
+**Build / Validation**
+- Final build/test results recorded below after completion.
+- Build command: Java 21 / Gradle wrapper `build -x neoFormJoined1.21.1-20240808.144430DownloadAssets --console=plain --no-daemon --max-workers=3 -Dorg.gradle.jvmargs=-Xmx4G` with the environment Java proxy properties: BUILD SUCCESSFUL. Only client asset downloading was excluded; no tests were excluded.
+- Standard test task: 204 tests, 0 failures, 0 errors, 0 skipped. The separate NeoGradle testJunit task reported NO-SOURCE.
+- Regression tests cover ammo write/remove round trips on real ItemStacks, shield depletion across ToolStack views, complete-container removal without capabilities, state-only updates retaining inventory, the global loot entrypoint and referenced resources, and one-row tooltip text/colors.
+- Verified archive integrity, unique entries, runtime version metadata and packaged NeoForge loot registration. `git diff --check` passed.
+- Artifact: `build/libs/ModernFoundry-1.21.1-4.1.9-NeoForge.jar`; SHA-256 `1ad661e605136bc9131d307245aa3d603d9cf4aefa8a2db618b08a2d3bf35ed1`. Interactive client gameplay and live mob-drop statistics were not tested.
+
+## 2026-10-25 - Prepare 4.1.9 fixes for push
+
+**Prompt / Task**
+- User clarified that the destination is the existing Git repository (GitHub origin).
+
+**What Changed / Steps Taken**
+- Prepared the six 4.1.9 fixes, tests and documentation for a single commit on Neo/1.21.1.
+- Verified the remote branch still matches the local base commit 6983f6b21c8512e4b912de399c628f8431684bd8.
+
+**Architecture / Module Ownership / Rationale**
+- Git publication only; no additional source or dependency changes.
+
+**Build / Validation**
+- Reused the successful 4.1.9 build and 204 passing tests recorded above.
+- git diff --check passed; push will use the normal fast-forward path.

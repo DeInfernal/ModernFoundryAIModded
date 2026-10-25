@@ -125,6 +125,20 @@ public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansi
       size.height * (direction == IBoxExpansion.HEIGHT ? 1 : 2) + 1, size.depth + 1);
   }
 
+  /** One tooltip row, retaining independent colors for each available mode. */
+  public net.minecraft.network.chat.Component getModeTooltip(IToolStackView tool) {
+    var result = net.minecraft.network.chat.Component.empty();
+    Mode selected = getSelectedMode(tool);
+    for (Mode mode : getModes(tool)) {
+      if (!result.getSiblings().isEmpty()) {
+        result.append(net.minecraft.network.chat.Component.literal(", ").withStyle(net.minecraft.ChatFormatting.GRAY));
+      }
+      result.append(net.minecraft.network.chat.Component.literal(mode.label()).withStyle(mode.equals(selected)
+        ? net.minecraft.ChatFormatting.GREEN : net.minecraft.ChatFormatting.GRAY));
+    }
+    return result;
+  }
+
   public Mode cycleMode(ToolStack tool) {
     List<Mode> modes = getModes(tool);
     Mode next = modes.get((modes.indexOf(getSelectedMode(tool)) + 1) % modes.size());

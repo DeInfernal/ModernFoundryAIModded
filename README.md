@@ -111,3 +111,9 @@ normal supported area if the saved size is no longer available.
 
 Akashic Tome 1.8-30 for Minecraft 1.21.1 is optional. When installed, all six
 Modern Foundry guide books implement its book API and can be attached to a tome.
+
+In 4.1.9, AOE mode sizes share one comma-separated tooltip row. Crossbow charges
+and Overslime consumption persist immediately on the item. Severing uses the
+normal recipe chances, and wither skeletons replace their bone drops with
+necrotic bones when `witherBoneDrop` is enabled (the default). Breaking casting
+tables or basins drops their stored cast and output inventory.

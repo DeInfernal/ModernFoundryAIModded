@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -90,6 +91,18 @@ public abstract class AbstractCastingBlock extends TableBlock {
   @Override
   public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
     BlockEntityHelper.get(CastingBlockEntity.class, worldIn, pos).ifPresent(CastingBlockEntity::swap);
+  }
+
+  /** Drop the complete inventory, independently of automation capability exposure. */
+  @Override
+  public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
+    if (!state.is(newState.getBlock()) && !level.isClientSide
+        && level.getBlockEntity(pos) instanceof CastingBlockEntity casting) {
+      Containers.dropContents(level, pos, casting);
+      casting.clearContent();
+    }
+    // The parent also checks the item capability; the emptied slots cannot drop twice.
+    super.onRemove(state, level, pos, newState, moving);
   }
 
   @Override

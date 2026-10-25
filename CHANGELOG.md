@@ -147,3 +147,11 @@
 * Explicitly accepted Modern Foundry arrows in modifiable bows and passed actual ammunition and weapon components to the vanilla arrow constructor.
 * Added per-tool AOE mode selection with Shift + right-click in air, persistent item data, and gray/green tooltip modes. Expanded upgrades unlock additional modes.
 * Prepared the verified 4.1.8 fixes build for GitHub release publication at the user's request.
+
+# v4.1.9
+* Fixed crossbow charges being consumed without being saved on the weapon.
+* Fixed Overslime amounts not persisting when absorbing durability damage.
+* Restored the NeoForge global loot entrypoint for Severing and configured wither-skeleton necrotic bone drops.
+* Casting tables and basins drop their complete inventories on removal without relying on automation capability exposure.
+* AOE modes now appear on one comma-separated tooltip row, retaining gray available modes and the green active mode.
+* Prepared the verified 4.1.9 fixes and regression tests for push to the development branch.

@@ -696,13 +696,13 @@ public class ToolStack implements IToolStackView {
     if (persistentModData == null) {
       // parse if the tag already exists
       if (nbt.contains(TAG_PERSISTENT_MOD_DATA, Tag.TAG_COMPOUND)) {
-        persistentModData = ToolDataNBT.readFromNBT(nbt.getCompound(TAG_PERSISTENT_MOD_DATA));
+        persistentModData = ToolDataNBT.readFromNBT(nbt.getCompound(TAG_PERSISTENT_MOD_DATA), this::syncStack);
       } else {
         // if no tag exists, create it
         CompoundTag tag = new CompoundTag();
         nbt.put(TAG_PERSISTENT_MOD_DATA, tag);
         syncStack();
-        persistentModData = ToolDataNBT.readFromNBT(tag);
+        persistentModData = ToolDataNBT.readFromNBT(tag, this::syncStack);
       }
     }
     return persistentModData;
