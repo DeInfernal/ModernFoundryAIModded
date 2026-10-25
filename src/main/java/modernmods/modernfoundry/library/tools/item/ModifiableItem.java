@@ -12,6 +12,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.ClipContext;
+import modernmods.modernfoundry.library.tools.definition.module.ToolHooks;
+import modernmods.modernfoundry.library.tools.definition.module.aoe.BoxAOEIterator;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlot.Type;
@@ -408,6 +413,19 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
       return InteractionResultHolder.pass(stack);
     }
     ToolStack tool = ToolStack.from(stack);
+    if (playerIn.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND
+        && tool.getHook(ToolHooks.AOE_ITERATOR)
+           instanceof BoxAOEIterator box
+        && box.getModes(tool).size() > 1
+        && getPlayerPOVHitResult(worldIn, playerIn, ClipContext.Fluid.NONE).getType()
+           == HitResult.Type.MISS) {
+      if (!worldIn.isClientSide) {
+        var mode = box.cycleMode(tool);
+        tool.updateStack(stack);
+        playerIn.displayClientMessage(Component.translatable("tooltip.modernfoundry.aoe_mode", mode.label()), true);
+      }
+      return InteractionResultHolder.sidedSuccess(stack, worldIn.isClientSide);
+    }
     if (shouldInteract(playerIn, tool, hand)) {
       for (ModifierEntry entry : tool.getModifierList()) {
         InteractionResult result = entry.getHook(ModifierHooks.GENERAL_INTERACT).onToolUse(tool, entry, playerIn, hand, InteractionSource.RIGHT_CLICK);
@@ -513,6 +531,17 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
     Level level = context.registries() == null ? null : SafeClientAccess.getLevel();
     TooltipUtil.addInformation(this, stack, level, tooltip, SafeClientAccess.getTooltipKey(), flag);
+    ToolStack tool = ToolStack.from(stack);
+    if (tool.getHook(ToolHooks.AOE_ITERATOR)
+        instanceof BoxAOEIterator box
+        && box.getModes(tool).size() > 1) {
+      tooltip.add(Component.translatable("tooltip.modernfoundry.aoe_switch").withStyle(ChatFormatting.GRAY));
+      var selected = box.getSelectedMode(tool);
+      for (var mode : box.getModes(tool)) {
+        tooltip.add(Component.literal(mode.label()).withStyle(mode.equals(selected)
+          ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+      }
+    }
   }
 
   public int getDefaultTooltipHideFlags(ItemStack stack) {

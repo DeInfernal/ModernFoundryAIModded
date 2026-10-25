@@ -100,3 +100,14 @@ Each new `mod_version` publishes a GitHub release marked **Latest** with the cur
 Thanks to the SlimeKnights projects and contributors, NeoForge, Just Enough Items, and the other libraries and integrations that make this work possible.
 
 Project source: [Modern-Mods/ModernFoundry](https://github.com/Modern-Mods/ModernFoundry)
+
+### AOE selection and book compatibility
+
+For box-area tools (including the sledge hammer), hold Shift and right-click in
+empty air to cycle the mining area. The tooltip lists available sizes in gray and
+the selected size in green. Selection is saved on each tool. Expanded upgrades
+unlock larger surfaces and deeper modes; removing an upgrade falls back to the
+normal supported area if the saved size is no longer available.
+
+Akashic Tome 1.8-30 for Minecraft 1.21.1 is optional. When installed, all six
+Modern Foundry guide books implement its book API and can be attached to a tome.

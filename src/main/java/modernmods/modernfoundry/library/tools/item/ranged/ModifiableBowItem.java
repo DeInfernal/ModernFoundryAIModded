@@ -1,6 +1,7 @@
 package modernmods.modernfoundry.library.tools.item.ranged;
 
 import net.minecraft.nbt.CompoundTag;
+import modernmods.modernfoundry.library.tools.item.ModifiableArrowItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -80,7 +81,8 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
 
   @Override
   public Predicate<ItemStack> getAllSupportedProjectiles() {
-    return ProjectileWeaponItem.ARROW_ONLY;
+    return stack -> stack.getItem() instanceof ModifiableArrowItem
+      || ProjectileWeaponItem.ARROW_ONLY.test(stack);
   }
 
   @Override

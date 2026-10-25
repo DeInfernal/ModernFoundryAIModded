@@ -1902,3 +1902,58 @@
 - Exact artifact verified: `build/libs/ModernFoundry-1.21.1-4.1.8-NeoForge.jar`; SHA-256 `dd521e890c39bc1a78b5a4c2fa2878fd6f2ec9f12de9ca63e76e29fdf7470ae9`.
 - Manual validation: none in-game for 4.1.8 itself.
 - Tests created or run: none (`testJunit` reported NO-SOURCE).
+
+## 2026-10-25 - Sand recipes, Akashic books, arrows and selectable AOE
+
+**Prompt / Task**
+- Correct sand tags, allow guides in Akashic Tome, repair crafted-arrow handling and add per-tool AOE selection; compile a Minecraft 1.21.1 JAR.
+
+**What Changed**
+- Added source-resource overrides for 58 sand cast recipes and corrected inactive recipe providers. Generated files remain unchanged.
+- Added optional Akashic Tome 1.8-30 compile-only API dependency and a conditionally instantiated book subclass implementing IModdedBook.
+- Bow ammo predicate explicitly accepts ModifiableArrowItem; arrow constructors now receive nonempty ammo and the firing weapon.
+- Box AOE selection is stored as modernfoundry:aoe_mode in persistent tool NBT, recalculated against current Expanded level, and shown with gray/green tooltip entries. Main-hand Shift + right-click in air cycles modes on the server.
+
+**Steps Taken**
+- Read TASK.md (empty), AGENTS.md, resource definitions, ammo hooks and vanilla 1.21.1 projectile source.
+- Checked Akashic Tome upstream attachment recipe: it recognizes IModdedBook rather than a guide tag.
+- Used Java 21, Gradle 9.2.1 wrapper, bundled Hilt 1.13 and the environment HTTPS proxy.
+
+**Architecture / Module Ownership**
+- Owning systems: smeltery recipes, shared guide books, ranged items/projectiles, box AOE tool module and tool UI.
+- Reused ToolStack persistent data, tool hooks, Expanded data and vanilla arrow initialization.
+- New files: source recipe overrides, AkashicBookItem, AOE and bow ammo regression tests.
+- Build configuration: compile-only optional API and explicit source-resource precedence for corrected smeltery recipes.
+
+**Rationale / Tradeoffs**
+- No runtime Akashic dependency is imposed when the mod is absent.
+- Tools without saved selections retain their normal default area; invalid selections after upgrade removal fall back to a supported area.
+- JUnit/build validation excludes the Minecraft client asset-download task (sound/texture assets are unnecessary for these unit tests); no test task is excluded.
+
+**Build / Validation**
+- Final validation results recorded below after the build.
+- No interactive Minecraft client or live multiplayer gameplay validation performed.
+- Build command: `GRADLE_USER_HOME=/workspace/.gradle-user bash gradlew build -x neoFormJoined1.21.1-20240808.144430DownloadAssets --console=plain --no-daemon --max-workers=3 -Dorg.gradle.jvmargs=-Xmx4G` with HTTP/HTTPS Java proxy properties: passed.
+- Standard `test` task: 198 tests, 0 failures, 0 errors, 0 skipped. Includes two AOE regression tests and one crafted-arrow ammo acceptance test. NeoGradle's separate `testJunit` task reported NO-SOURCE; it is not counted as validation.
+- Verified packaged contents: 28 normal-sand and 28 red-sand Part Builder recipes, two blank cast recipes, six guide IDs, vanilla arrow tag, optional Akashic implementation class, no bundled Akashic classes, no duplicate archive entries.
+- `verifyGeneratedTextures` and `git diff --check`: passed.
+- Final rebuild after the main-hand switching guard: BUILD SUCCESSFUL; all 198 tests passed again. Bytecode confirms the MAIN_HAND guard is present.
+- Final artifact: `build/libs/ModernFoundry-1.21.1-4.1.8-NeoForge.jar`.
+- SHA-256: `6bcf3647eedc196af64c0a69bf326595accf1ff39653fb0b3d62b6fbfafc8c22`.
+
+## 2026-10-25 - Prepare push and GitHub release v4.1.8
+
+**Prompt / Task**
+- User requested pushing the fixes and publishing a release with the compiled JAR.
+
+**What Changed / Steps Taken**
+- Checked origin is DeInfernal/ModernFoundryAIModded, branch Neo/1.21.1 remains at the original base, and GitHub push access is available.
+- Confirmed no existing remote tags or releases; retained the project's current version 4.1.8.
+- Prepared all requested fixes, regression tests and documentation for one commit and the verified JAR for release upload.
+
+**Architecture / Module Ownership / Rationale**
+- Publication only; no additional gameplay changes, dependencies or source modules changed for this follow-up.
+
+**Build / Validation**
+- Reused the successful build and 198 passing tests recorded above; executable JAR SHA-256 rechecked as 6bcf3647eedc196af64c0a69bf326595accf1ff39653fb0b3d62b6fbfafc8c22.
+- git diff --check passed. Remote publication will be verified after push/upload.

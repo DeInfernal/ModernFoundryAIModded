@@ -140,3 +140,10 @@
     * Restored the `armor_trims` texture atlas and the trim, banner, and fallback textures in the blocks atlas, so trims in cobalt, slimesteel, slime crystals, and the other Modern Foundry materials render on worn armor and on Modern Foundry armor and shield icons.
 * Built and verified the Modern Foundry 1.21.1-4.1.8 NeoForge JAR.
     * SHA-256: `dd521e890c39bc1a78b5a4c2fa2878fd6f2ec9f12de9ca63e76e29fdf7470ae9`.
+
+# v4.1.8 - Recipe, book, arrow and AOE fixes
+* Separated blank sand and red sand casts using NeoForge's `c:sands/colorless` and `c:sands/red` tags.
+* Added optional Akashic Tome book API support for all six guides.
+* Explicitly accepted Modern Foundry arrows in modifiable bows and passed actual ammunition and weapon components to the vanilla arrow constructor.
+* Added per-tool AOE mode selection with Shift + right-click in air, persistent item data, and gray/green tooltip modes. Expanded upgrades unlock additional modes.
+* Prepared the verified 4.1.8 fixes build for GitHub release publication at the user's request.

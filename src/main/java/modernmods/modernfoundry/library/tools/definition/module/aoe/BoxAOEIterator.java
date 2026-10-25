@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import modernmods.modernfoundry.TConstruct;
+import modernmods.modernfoundry.library.tools.nbt.ToolStack;
+import java.util.LinkedHashSet;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.UseOnContext;
@@ -78,10 +82,66 @@ public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansi
     return new BoxSize(width, height, depth);
   }
 
+  private static final ResourceLocation MODE = TConstruct.getResource("aoe_mode");
+
+  /** Actual block counts, rather than radii, form a stable per-stack selection. */
+  public record Mode(int width, int height, int depth) {
+    public String label() {
+      return width + "×" + height + (depth > 1 ? "×" + depth : "");
+    }
+    public String key() { return width + "x" + height + "x" + depth; }
+  }
+
+  public List<Mode> getModes(IToolStackView tool) {
+    int expanded = Math.max(0, tool.getVolatileData().getInt(IModifiable.EXPANDED));
+    LinkedHashSet<Mode> modes = new LinkedHashSet<>();
+    modes.add(new Mode(1, 1, 1));
+    BoxSize maximum = sizeFor(expanded);
+    if (maximum.height > 0) {
+      modes.add(new Mode(1, 2, 1));
+    }
+    for (int level = 0; level <= expanded; level++) {
+      BoxSize size = sizeFor(level);
+      int height = size.height * (direction == IBoxExpansion.HEIGHT ? 1 : 2) + 1;
+      modes.add(new Mode(size.width * 2 + 1, height, size.depth + 1));
+      // Expanded unlocks depth as well as the definition's wider surface.
+      if (level > 0) {
+        modes.add(new Mode(base.width * 2 + 1,
+          base.height * (direction == IBoxExpansion.HEIGHT ? 1 : 2) + 1, base.depth + level + 1));
+      }
+    }
+    return List.copyOf(modes);
+  }
+
+  public Mode getSelectedMode(IToolStackView tool) {
+    List<Mode> modes = getModes(tool);
+    String selected = tool.getPersistentData().getString(MODE);
+    for (Mode mode : modes) {
+      if (mode.key().equals(selected)) { return mode; }
+    }
+    // Preserve the old default when no mode was selected or an upgrade was removed.
+    BoxSize size = sizeFor(tool.getVolatileData().getInt(IModifiable.EXPANDED));
+    return new Mode(size.width * 2 + 1,
+      size.height * (direction == IBoxExpansion.HEIGHT ? 1 : 2) + 1, size.depth + 1);
+  }
+
+  public Mode cycleMode(ToolStack tool) {
+    List<Mode> modes = getModes(tool);
+    Mode next = modes.get((modes.indexOf(getSelectedMode(tool)) + 1) % modes.size());
+    tool.getPersistentData().putString(MODE, next.key());
+    return next;
+  }
+
   @Override
   public Iterable<BlockPos> getBlocks(IToolStackView tool, UseOnContext context, BlockState state, AOEMatchType matchType) {
-    // expanded gives an extra width every odd level, and an extra height every even level
-    return calculate(tool, context, sizeFor(tool.getVolatileData().getInt(IModifiable.EXPANDED)), direction, matchType);
+    Mode mode = getSelectedMode(tool);
+    boolean down = direction != IBoxExpansion.HEIGHT && mode.height % 2 == 1;
+    IBoxExpansion selectedDirection = (player, face) -> {
+      ExpansionDirections dirs = direction.getDirections(player, face);
+      return new ExpansionDirections(dirs.width(), dirs.height(), dirs.depth(), down);
+    };
+    return calculate(tool, context, new BoxSize((mode.width - 1) / 2,
+      down ? (mode.height - 1) / 2 : mode.height - 1, mode.depth - 1), selectedDirection, matchType);
   }
 
   /**

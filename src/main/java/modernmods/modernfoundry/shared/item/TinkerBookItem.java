@@ -12,6 +12,14 @@ public class TinkerBookItem extends AbstractBookItem {
     this.bookType = bookType;
   }
 
+  /** Keep the optional Akashic API out of the base book class. */
+  public static TinkerBookItem create(Properties props, BookType type) {
+    if (net.neoforged.fml.ModList.get().isLoaded("akashictome")) {
+      return new AkashicBookItem(props, type);
+    }
+    return new TinkerBookItem(props, type);
+  }
+
   @Override
   public BookScreenOpener getBook(ItemStack stack) {
     return TinkerBook.getBook(bookType);

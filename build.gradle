@@ -53,6 +53,12 @@ sourceSets {
         }
         resources {
             srcDirs "src/generated/resources"
+            // Hand-maintained corrections override these inactive datagen outputs.
+            exclude { details ->
+                details.file.path.replace('\\', '/').contains('/src/generated/resources/') &&
+                    details.path.startsWith('data/modernfoundry/recipe/smeltery/') &&
+                    file('src/main/resources/' + details.path).isFile()
+            }
             //But exclude the cache of the generated data from what gets built
             exclude '.cache'
             // exclude debug resources, they are for helping us make the mod, not for the actual mod
@@ -201,6 +207,13 @@ configurations {
 }
 
 repositories {
+    ivy {
+        name = 'AkashicTomeReleases'
+        url = 'https://github.com/VazkiiMods/AkashicTome/releases/download'
+        patternLayout { artifact 'release-1.21.1-[revision]/[artifact]-[revision].[ext]' }
+        metadataSources { artifact() }
+        content { includeModule 'vazkii.akashictome', 'AkashicTome' }
+    }
     mavenCentral()
     maven {
         name 'NeoForge'
@@ -228,6 +241,7 @@ repositories {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
+    compileOnly 'vazkii.akashictome:AkashicTome:1.8-30@jar'
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
 
