@@ -20,7 +20,7 @@ import java.util.function.Predicate;
  * @param diameter  Diameter of the circle, starting from 1
  * @param is3D      If true, calculates AOE blocks in 3D instead of 2D
  */
-public record CircleAOEIterator(int diameter, boolean is3D) implements AreaOfEffectIterator.Loadable {
+public record CircleAOEIterator(int diameter, boolean is3D) implements AreaOfEffectIterator.Loadable, SelectableAOEIterator {
   public static final RecordLoadable<CircleAOEIterator> LOADER = RecordLoadable.create(
     IntLoadable.FROM_ONE.defaultField("diameter", 1, true, CircleAOEIterator::diameter),
     BooleanLoadable.INSTANCE.defaultField("3D", false, CircleAOEIterator::is3D),
@@ -32,9 +32,13 @@ public record CircleAOEIterator(int diameter, boolean is3D) implements AreaOfEff
   }
 
   @Override
+  public BoxAOEIterator selectionBox() {
+    return BoxAOEIterator.builder(diameter > 1 ? 1 : 0, diameter > 1 ? 1 : 0, 0).build();
+  }
+
+  @Override
   public Iterable<BlockPos> getBlocks(IToolStackView tool, UseOnContext context, BlockState state, AOEMatchType matchType) {
-    // expanded gives an extra width every odd level, and an extra height every even level
-    return calculate(tool, context, diameter + tool.getVolatileData().getInt(IModifiable.EXPANDED), is3D, matchType);
+    return selectionBox().getBlocks(tool, context, state, matchType);
   }
 
   /**

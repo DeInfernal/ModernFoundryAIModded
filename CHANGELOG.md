@@ -155,3 +155,14 @@
 * Casting tables and basins drop their complete inventories on removal without relying on automation capability exposure.
 * AOE modes now appear on one comma-separated tooltip row, retaining gray available modes and the green active mode.
 * Prepared the verified 4.1.9 fixes and regression tests for push to the development branch.
+
+# v4.2.0
+* Added the mining-mode ladder: 1×1, 1×2, plus (1×3+3×1), 3×3, 3×3×3, 5×3, 5×5, 5×5×5, 7×7 and 9×9, with per-item selection and a single gray/green tooltip row.
+* Expanded I/II/III unlock through plus/5×3/5×5×5 for single-block tools and 5×5/7×7/9×9 for broad tools. Vein Hammer gains five blocks of search distance per level.
+* Broad Axe fells connected trunks and branches only when natural, nonpersistent leaves are present; other targets remain single-block operations. Removed its AOE modes, switching, extra-block outlines and crack previews. Tree scans are bounded and do not load chunks.
+* Added 34 Polymorph-only crafting alternatives while retaining vanilla results: wooden, stone, iron and diamond-pattern basic tools; tiered Sledge Hammers, Excavators and Broad Axes; a wooden/string longbow; and four flint/wood/feather arrows.
+* Added the requested broad-tool patterns using logs, smooth stone, iron ingots or diamonds, with wooden handles and bindings. Diamond-pattern tools use iron heads with Diamond I and its normal upgrade-slot cost. No golden alternatives or new diamond/gold tool materials are introduced; existing gold material support is preserved.
+* Fixed unsupported material-stat IDs being sent as unencodable command-error arguments in system chat.
+* Smeltery now requires a complete frame and base like Foundry, including floor perimeter and corners.
+* Added the four-part Paxel, assembled on an anvil from a pick head, small axe head, adze head and handle. It mines pickaxe/axe/shovel blocks without innate log stripping or path creation; includes models, tags, station layout, translations and guide pages.
+* Added fixed-material recipe modifier/slot synchronization and source-resource precedence over matching generated resources. Verified the build and 223 tests with no failures or skips.

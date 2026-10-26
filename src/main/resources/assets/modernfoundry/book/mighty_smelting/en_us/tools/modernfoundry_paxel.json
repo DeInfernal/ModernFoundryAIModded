@@ -1,0 +1,14 @@
+{
+  "tool": "modernfoundry:paxel",
+  "text": [
+    {
+      "text": "A four-part pickaxe, axe and shovel assembled on an anvil. Use a pick head, small axe head, adze head (the shovel component), and tool handle. Paxels do not strip logs or create paths."
+    }
+  ],
+  "properties": [
+    "Anvil only",
+    "Four interchangeable parts",
+    "Pickaxe, axe and shovel mining",
+    "Starts at 1×1"
+  ]
+}

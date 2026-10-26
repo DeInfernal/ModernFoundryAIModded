@@ -11,6 +11,10 @@
     {
       "text": "The max size of your smeltery is 16x16x65 external, or 14x14x64 internal.",
       "paragraph": true
+    },
+    {
+      "text": "The entire base must be filled, including its perimeter and all four corners, just like the Foundry. The minimum 1×1 interior requires a solid 3×3 base.",
+      "paragraph": true
     }
   ]
 }

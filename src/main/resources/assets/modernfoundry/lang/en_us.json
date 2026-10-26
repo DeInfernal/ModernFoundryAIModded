@@ -4216,6 +4216,8 @@
   "advancements.modernfoundry.world.ancient_tools.title": "Archeologists",
   "advancements.modernfoundry.world.ancient_tools.description": "Discover all original types of ancient tool",
   "tooltip.modernfoundry.aoe_mode": "AOE: %s",
-  "tooltip.modernfoundry.aoe_switch": "AOE modes (Shift + right-click in air)"
+  "tooltip.modernfoundry.aoe_switch": "AOE modes (Shift + right-click in air)",
+"item.modernfoundry.paxel": "Paxel",
+"item.modernfoundry.paxel.description": "A four-part pickaxe, axe and shovel. Assemble on an anvil. Does not strip logs or create paths."
 }
 

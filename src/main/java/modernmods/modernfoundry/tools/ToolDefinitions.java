@@ -7,6 +7,7 @@ import modernmods.modernfoundry.library.tools.definition.ToolDefinition;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ToolDefinitions {
   // rock
+  public static final ToolDefinition PAXEL = ToolDefinition.create(TinkerTools.paxel);
   public static final ToolDefinition PICKAXE = ToolDefinition.create(TinkerTools.pickaxe);
   public static final ToolDefinition SLEDGE_HAMMER = ToolDefinition.create(TinkerTools.sledgeHammer);
   public static final ToolDefinition VEIN_HAMMER = ToolDefinition.create(TinkerTools.veinHammer);

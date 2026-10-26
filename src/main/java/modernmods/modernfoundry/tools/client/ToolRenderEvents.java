@@ -36,6 +36,7 @@ import modernmods.modernfoundry.TConstruct;
 import modernmods.modernfoundry.common.TinkerTags;
 import modernmods.modernfoundry.library.tools.definition.module.ToolHooks;
 import modernmods.modernfoundry.library.tools.definition.module.aoe.AreaOfEffectIterator;
+import modernmods.modernfoundry.library.tools.definition.module.aoe.HiddenAOEIterator;
 import modernmods.modernfoundry.library.tools.definition.module.aoe.AreaOfEffectIterator.AOEMatchType;
 import modernmods.modernfoundry.library.tools.definition.module.mining.IsEffectiveToolHook;
 import modernmods.modernfoundry.library.tools.nbt.ToolStack;
@@ -72,7 +73,7 @@ public class ToolRenderEvents {
     }
     // must not be broken, must be right interface
     ToolStack tool = ToolStack.from(stack);
-    if (tool.isBroken()) {
+    if (tool.isBroken() || tool.getHook(ToolHooks.AOE_ITERATOR) instanceof HiddenAOEIterator) {
       return;
     }
     BlockHitResult blockTrace = event.getTarget();
@@ -147,7 +148,7 @@ public class ToolRenderEvents {
     }
     // must not be broken, must be right interface
     ToolStack tool = ToolStack.from(stack);
-    if (tool.isBroken()) {
+    if (tool.isBroken() || tool.getHook(ToolHooks.AOE_ITERATOR) instanceof HiddenAOEIterator) {
       return;
     }
     // find breaking progress

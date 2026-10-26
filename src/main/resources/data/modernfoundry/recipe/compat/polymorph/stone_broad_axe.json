@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "polymorph"
+    }
+  ],
+  "type": "modernfoundry:crafting_fixed_material_tool",
+  "category": "equipment",
+  "pattern": [
+    "XXX",
+    "XS ",
+    "XS "
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:smooth_stone"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "modernfoundry:broad_axe",
+    "count": 1
+  },
+  "materials": [
+    "modernfoundry:rock",
+    "modernfoundry:wood",
+    "modernfoundry:rock",
+    "modernfoundry:wood"
+  ]
+}

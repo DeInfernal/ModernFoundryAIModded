@@ -309,9 +309,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       // harvest
       .module(ToolActionsModule.of(ItemAbilities.AXE_DIG, TinkerToolActions.SHIELD_DISABLE))
       .module(IsEffectiveModule.tag(BlockTags.MINEABLE_WITH_AXE))
-      .module(new ConditionalAOEIterator(
-        BlockPredicate.tag(TinkerTags.Blocks.TREE_LOGS), new TreeAOEIterator(0, 0),
-        BoxAOEIterator.builder(0, 5, 0).addWidth(1).addDepth(1).direction(IBoxExpansion.HEIGHT).build()))
+      .module(new TreeAOEIterator(0, 0))
       .module(new ParticleWeaponAttack(TinkerTools.axeAttackParticle.get()));
 
     // scythes

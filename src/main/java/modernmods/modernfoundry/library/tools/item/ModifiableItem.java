@@ -16,7 +16,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.ClipContext;
 import modernmods.modernfoundry.library.tools.definition.module.ToolHooks;
-import modernmods.modernfoundry.library.tools.definition.module.aoe.BoxAOEIterator;
+import modernmods.modernfoundry.library.tools.definition.module.aoe.SelectableAOEIterator;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlot.Type;
@@ -415,12 +415,12 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
     ToolStack tool = ToolStack.from(stack);
     if (playerIn.isShiftKeyDown() && hand == InteractionHand.MAIN_HAND
         && tool.getHook(ToolHooks.AOE_ITERATOR)
-           instanceof BoxAOEIterator box
-        && box.getModes(tool).size() > 1
+           instanceof SelectableAOEIterator selectable
+        && selectable.selectionBox().getModes(tool).size() > 1
         && getPlayerPOVHitResult(worldIn, playerIn, ClipContext.Fluid.NONE).getType()
            == HitResult.Type.MISS) {
       if (!worldIn.isClientSide) {
-        var mode = box.cycleMode(tool);
+        var mode = selectable.selectionBox().cycleMode(tool);
         tool.updateStack(stack);
         playerIn.displayClientMessage(Component.translatable("tooltip.modernfoundry.aoe_mode", mode.label()), true);
       }
@@ -533,10 +533,10 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
     TooltipUtil.addInformation(this, stack, level, tooltip, SafeClientAccess.getTooltipKey(), flag);
     ToolStack tool = ToolStack.from(stack);
     if (tool.getHook(ToolHooks.AOE_ITERATOR)
-        instanceof BoxAOEIterator box
-        && box.getModes(tool).size() > 1) {
+        instanceof SelectableAOEIterator selectable
+        && selectable.selectionBox().getModes(tool).size() > 1) {
       tooltip.add(Component.translatable("tooltip.modernfoundry.aoe_switch").withStyle(ChatFormatting.GRAY));
-      tooltip.add(box.getModeTooltip(tool));
+      tooltip.add(selectable.selectionBox().getModeTooltip(tool));
     }
   }
 

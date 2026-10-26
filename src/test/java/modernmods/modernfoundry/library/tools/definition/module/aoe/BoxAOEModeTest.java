@@ -11,7 +11,40 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-class BoxAOEModeTest {
+class BoxAOEModeTest extends modernmods.modernfoundry.test.BaseMcTest {
+  @Test
+  void exactExpandedProgressionForSmallAndBroadTools() {
+    var small = BoxAOEIterator.builder(0, 0, 0).build();
+    var broad = BoxAOEIterator.builder(1, 1, 0).build();
+    var tool = mock(ToolStack.class);
+    var upgrades = new ModDataNBT();
+    when(tool.getVolatileData()).thenReturn(upgrades);
+    when(tool.getPersistentData()).thenReturn(new ToolDataNBT());
+    String[] smallCaps = {"1×1", "1×3+3×1", "5×3", "5×5×5"};
+    String[] broadCaps = {"3×3", "5×5", "7×7", "9×9"};
+    for (int level = 0; level <= 3; level++) {
+      upgrades.putInt(IModifiable.EXPANDED, level);
+      assertThat(small.getModes(tool).getLast().label()).isEqualTo(smallCaps[level]);
+      assertThat(broad.getModes(tool).getLast().label()).isEqualTo(broadCaps[level]);
+    }
+  }
+
+  @Test
+  void plusAndCubeGeometryWorksForEveryHitFace() {
+    for (Direction face : Direction.values()) {
+      var dirs = IBoxExpansion.SIDE_HIT.getDirections(null, face);
+      var plus = new java.util.HashSet<BlockPos>();
+      BoxAOEIterator.blocksForMode(new BoxAOEIterator.Mode(3, 3, 1, true), BlockPos.ZERO, dirs, p -> true)
+        .forEach(p -> plus.add(p.immutable()));
+      assertThat(plus).hasSize(4).contains(BlockPos.ZERO.relative(dirs.width()), BlockPos.ZERO.relative(dirs.width().getOpposite()),
+        BlockPos.ZERO.relative(dirs.height()), BlockPos.ZERO.relative(dirs.height().getOpposite()));
+      var cube = new java.util.HashSet<BlockPos>();
+      BoxAOEIterator.blocksForMode(new BoxAOEIterator.Mode(5, 5, 5), BlockPos.ZERO, dirs, p -> true)
+        .forEach(p -> cube.add(p.immutable()));
+      assertThat(cube).hasSize(124).doesNotContain(BlockPos.ZERO);
+    }
+  }
+
   @Test
   void modesUseOneCommaSeparatedRowWithIndependentColors() {
     var box = BoxAOEIterator.builder(1, 1, 0).build();
@@ -19,10 +52,10 @@ class BoxAOEModeTest {
     when(tool.getPersistentData()).thenReturn(new ToolDataNBT());
     when(tool.getVolatileData()).thenReturn(new ModDataNBT());
     var row = box.getModeTooltip(tool);
-    assertThat(row.getString()).isEqualTo("1×1, 1×2, 3×3");
-    assertThat(row.getSiblings()).hasSize(5);
+    assertThat(row.getString()).isEqualTo("1×1, 1×2, 1×3+3×1, 3×3");
+    assertThat(row.getSiblings()).hasSize(7);
     assertThat(row.getSiblings().get(0).getStyle().getColor().getValue()).isEqualTo(0xAAAAAA);
-    assertThat(row.getSiblings().get(4).getStyle().getColor().getValue()).isEqualTo(0x55FF55);
+    assertThat(row.getSiblings().get(6).getStyle().getColor().getValue()).isEqualTo(0x55FF55);
   }
 
   @Test

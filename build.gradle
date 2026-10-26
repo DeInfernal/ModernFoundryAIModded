@@ -53,10 +53,9 @@ sourceSets {
         }
         resources {
             srcDirs "src/generated/resources"
-            // Hand-maintained corrections override these inactive datagen outputs.
+            // Source-maintained resources override inactive datagen outputs at matching paths.
             exclude { details ->
                 details.file.path.replace('\\', '/').contains('/src/generated/resources/') &&
-                    details.path.startsWith('data/modernfoundry/recipe/smeltery/') &&
                     file('src/main/resources/' + details.path).isFile()
             }
             //But exclude the cache of the generated data from what gets built

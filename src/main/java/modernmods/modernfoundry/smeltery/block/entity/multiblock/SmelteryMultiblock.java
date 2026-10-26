@@ -6,7 +6,7 @@ import modernmods.modernfoundry.smeltery.block.entity.controller.SmelteryBlockEn
 
 public class SmelteryMultiblock extends HeatingStructureMultiblock<SmelteryBlockEntity> {
   public SmelteryMultiblock(SmelteryBlockEntity smeltery) {
-    super(smeltery, true, false, false);
+    super(smeltery, true, true, false);
   }
 
   @Override

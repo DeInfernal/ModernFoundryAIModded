@@ -41,7 +41,7 @@ public class MaterialsCommand {
   private static final String ADD_SUCCESS = TConstruct.makeTranslationKey("command", "materials.success.set.single");
   private static final String ADD_SUCCESS_MULTIPLE = TConstruct.makeTranslationKey("command", "materials.success.set.multiple");
   private static final Dynamic2CommandExceptionType INVALID_INDEX = new Dynamic2CommandExceptionType((index, name) -> TConstruct.makeTranslation("command", "materials.failure.invalid_index", index, name));
-  private static final Dynamic2CommandExceptionType INVALID_STATS = new Dynamic2CommandExceptionType((statType, stats) -> TConstruct.makeTranslation("command", "materials.failure.invalid_stats", statType, stats));
+  static final Dynamic2CommandExceptionType INVALID_STATS = new Dynamic2CommandExceptionType((statType, stats) -> TConstruct.makeTranslation("command", "materials.failure.invalid_stats", statType.toString(), stats));
   private static final Component NO_TRAITS = TConstruct.makeTranslation("command", "materials.failure.no_traits").withStyle(ChatFormatting.ITALIC);
 
   /**
@@ -119,16 +119,18 @@ public class MaterialsCommand {
     return size;
   }
 
+  static Component statsMessage(IMaterialStats stats, Component material, float scale) {
+    MutableComponent output = material == null
+      ? TConstruct.makeTranslation("command", "materials.success.stats.default", stats.getLocalizedName(), scale)
+      : TConstruct.makeTranslation("command", "materials.success.stats.material", stats.getLocalizedName(), material, scale);
+    for (Component component : stats.getLocalizedInfo(scale)) { output.append("\n* ").append(component); }
+    return output;
+  }
+
   /** Sets the material at the index */
   private static int defaultStats(CommandContext<CommandSourceStack> context, float scale) {
-    context.getSource().sendSuccess(() -> {
-      MaterialStatType<?> statType = MaterialStatsArgument.getStat(context, "stat_type");
-      MutableComponent output = TConstruct.makeTranslation("command", "materials.success.stats.default", statType.getDefaultStats().getLocalizedName(), scale);
-      for (Component component : statType.getDefaultStats().getLocalizedInfo(scale)) {
-        output.append("\n* ").append(component);
-      }
-      return output;
-    }, true);
+    MaterialStatType<?> statType = MaterialStatsArgument.getStat(context, "stat_type");
+    context.getSource().sendSuccess(() -> statsMessage(statType.getDefaultStats(), null, scale), true);
     return 1;
   }
 
@@ -138,13 +140,7 @@ public class MaterialsCommand {
     MaterialStatType<?> statType = MaterialStatsArgument.getStat(context, "stat_type");
     Optional<IMaterialStats> stats = MaterialRegistry.getInstance().getMaterialStats(material, statType.getId());
     if (stats.isPresent()) {
-      context.getSource().sendSuccess(() -> {
-        MutableComponent output = TConstruct.makeTranslation("command", "materials.success.stats.material", stats.get().getLocalizedName(), MaterialTooltipCache.getDisplayName(material), scale);
-        for (Component component : stats.get().getLocalizedInfo(scale)) {
-          output.append("\n* ").append(component);
-        }
-        return output;
-      }, true);
+      context.getSource().sendSuccess(() -> statsMessage(stats.get(), MaterialTooltipCache.getDisplayName(material), scale), true);
       return 1;
     } else {
       throw INVALID_STATS.create(statType.getId(), MaterialTooltipCache.getDisplayName(material));

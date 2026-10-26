@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import modernmods.modernfoundry.TConstruct;
 import modernmods.modernfoundry.library.tools.nbt.ToolStack;
-import java.util.LinkedHashSet;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.UseOnContext;
@@ -32,7 +31,7 @@ import java.util.function.Predicate;
  * @param expansions  Values to boost the size by for each expansion
  * @param direction   Direction for expanding
  */
-public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansion direction) implements AreaOfEffectIterator.Loadable {
+public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansion direction) implements AreaOfEffectIterator.Loadable, SelectableAOEIterator {
   public static final RecordLoadable<BoxAOEIterator> LOADER = RecordLoadable.create(
     BoxSize.LOADER.defaultField("bonus", BoxSize.ZERO, BoxAOEIterator::base),
     BoxSize.LOADER.list(0).defaultField("expansions", List.of(), BoxAOEIterator::expansions),
@@ -53,76 +52,38 @@ public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansi
     return LOADER;
   }
 
-  /** Gets the size for a given level of expanded */
-  private BoxSize sizeFor(int level) {
-    int size = expansions.size();
-    if (level == 0 || size == 0) {
-      return base;
-    }
-    int width = base.width;
-    int height = base.height;
-    int depth = base.depth;
-    // if we have the number of expansions or more, add in all expansions as many times as needed
-    if (level >= size) {
-      int cycles = level / size;
-      for (BoxSize expansion : expansions) {
-        width  += expansion.width  * cycles;
-        height += expansion.height * cycles;
-        depth  += expansion.depth  * cycles;
-      }
-    }
-    // partial iteration through the list for the remaining expansions
-    int remainder = level % size;
-    for (int i = 0; i < remainder; i++) {
-      BoxSize expansion = expansions.get(i);
-      width  += expansion.width;
-      height += expansion.height;
-      depth  += expansion.depth;
-    }
-    return new BoxSize(width, height, depth);
-  }
-
   private static final ResourceLocation MODE = TConstruct.getResource("aoe_mode");
 
-  /** Actual block counts, rather than radii, form a stable per-stack selection. */
-  public record Mode(int width, int height, int depth) {
+  public record Mode(int width, int height, int depth, boolean cross) {
+    public Mode(int width, int height, int depth) { this(width, height, depth, false); }
     public String label() {
-      return width + "×" + height + (depth > 1 ? "×" + depth : "");
+      return cross ? "1×3+3×1" : width + "×" + height + (depth > 1 ? "×" + depth : "");
     }
-    public String key() { return width + "x" + height + "x" + depth; }
+    public String key() { return cross ? "cross" : width + "x" + height + "x" + depth; }
   }
 
+  private static final List<Mode> MODES = List.of(
+    new Mode(1, 1, 1), new Mode(1, 2, 1), new Mode(3, 3, 1, true),
+    new Mode(3, 3, 1), new Mode(3, 3, 3), new Mode(5, 3, 1),
+    new Mode(5, 5, 1), new Mode(5, 5, 5), new Mode(7, 7, 1), new Mode(9, 9, 1));
+
+  @Override
+  public BoxAOEIterator selectionBox() { return this; }
+
+  public boolean isBroad() { return base.width > 0 || base.height > 0; }
+
   public List<Mode> getModes(IToolStackView tool) {
-    int expanded = Math.max(0, tool.getVolatileData().getInt(IModifiable.EXPANDED));
-    LinkedHashSet<Mode> modes = new LinkedHashSet<>();
-    modes.add(new Mode(1, 1, 1));
-    BoxSize maximum = sizeFor(expanded);
-    if (maximum.height > 0) {
-      modes.add(new Mode(1, 2, 1));
-    }
-    for (int level = 0; level <= expanded; level++) {
-      BoxSize size = sizeFor(level);
-      int height = size.height * (direction == IBoxExpansion.HEIGHT ? 1 : 2) + 1;
-      modes.add(new Mode(size.width * 2 + 1, height, size.depth + 1));
-      // Expanded unlocks depth as well as the definition's wider surface.
-      if (level > 0) {
-        modes.add(new Mode(base.width * 2 + 1,
-          base.height * (direction == IBoxExpansion.HEIGHT ? 1 : 2) + 1, base.depth + level + 1));
-      }
-    }
-    return List.copyOf(modes);
+    int level = Math.min(3, Math.max(0, tool.getVolatileData().getInt(IModifiable.EXPANDED)));
+    int maximum = isBroad() ? new int[]{3, 6, 8, 9}[level] : new int[]{0, 2, 5, 7}[level];
+    return MODES.subList(0, maximum + 1);
   }
 
   public Mode getSelectedMode(IToolStackView tool) {
-    List<Mode> modes = getModes(tool);
     String selected = tool.getPersistentData().getString(MODE);
-    for (Mode mode : modes) {
+    for (Mode mode : getModes(tool)) {
       if (mode.key().equals(selected)) { return mode; }
     }
-    // Preserve the old default when no mode was selected or an upgrade was removed.
-    BoxSize size = sizeFor(tool.getVolatileData().getInt(IModifiable.EXPANDED));
-    return new Mode(size.width * 2 + 1,
-      size.height * (direction == IBoxExpansion.HEIGHT ? 1 : 2) + 1, size.depth + 1);
+    return MODES.get(isBroad() ? 3 : 0);
   }
 
   /** One tooltip row, retaining independent colors for each available mode. */
@@ -148,14 +109,22 @@ public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansi
 
   @Override
   public Iterable<BlockPos> getBlocks(IToolStackView tool, UseOnContext context, BlockState state, AOEMatchType matchType) {
-    Mode mode = getSelectedMode(tool);
-    boolean down = direction != IBoxExpansion.HEIGHT && mode.height % 2 == 1;
-    IBoxExpansion selectedDirection = (player, face) -> {
-      ExpansionDirections dirs = direction.getDirections(player, face);
-      return new ExpansionDirections(dirs.width(), dirs.height(), dirs.depth(), down);
-    };
-    return calculate(tool, context, new BoxSize((mode.width - 1) / 2,
-      down ? (mode.height - 1) / 2 : mode.height - 1, mode.depth - 1), selectedDirection, matchType);
+    return blocksForMode(getSelectedMode(tool), context.getClickedPos(),
+      direction.getDirections(context.getPlayer(), context.getClickedFace()),
+      AreaOfEffectIterator.defaultBlockPredicate(tool, context, matchType));
+  }
+
+  /** Shared geometry for highlights, harvesting and tests; never includes the primary block. */
+  public static Iterable<BlockPos> blocksForMode(Mode mode, BlockPos origin, ExpansionDirections dirs, Predicate<BlockPos> predicate) {
+    boolean centered = mode.height % 2 == 1;
+    Predicate<BlockPos> match = mode.cross ? pos -> {
+      BlockPos delta = pos.subtract(origin);
+      int horizontal = delta.getX() * dirs.width().getStepX() + delta.getY() * dirs.width().getStepY() + delta.getZ() * dirs.width().getStepZ();
+      int vertical = delta.getX() * dirs.height().getStepX() + delta.getY() * dirs.height().getStepY() + delta.getZ() * dirs.height().getStepZ();
+      return (horizontal == 0 || vertical == 0) && predicate.test(pos);
+    } : predicate;
+    return () -> new RectangleIterator(origin, dirs.width(), (mode.width - 1) / 2, dirs.height(),
+      centered ? (mode.height - 1) / 2 : mode.height - 1, centered, dirs.depth(), mode.depth - 1, match);
   }
 
   /**

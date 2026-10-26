@@ -3509,5 +3509,7 @@
   "command.modernfoundry.durability.success.set.multiple": "Оставшаяся прочность установлена на %s у %s сущностей",
   "command.modernfoundry.durability.failure.invalid_amount": "Нельзя добавить ноль прочности, нужно добавить положительное или отрицательное значение",
   "tooltip.modernfoundry.aoe_mode": "Область: %s",
-  "tooltip.modernfoundry.aoe_switch": "Режимы области (Shift + ПКМ в воздухе)"
+  "tooltip.modernfoundry.aoe_switch": "Режимы области (Shift + ПКМ в воздухе)",
+"item.modernfoundry.paxel": "Паксель",
+"item.modernfoundry.paxel.description": "Кирка, топор и лопата из четырёх деталей. Собирается на наковальне; не снимает кору и не создаёт тропинки."
 }

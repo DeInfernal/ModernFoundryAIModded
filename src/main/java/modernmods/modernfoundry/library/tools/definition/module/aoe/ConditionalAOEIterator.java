@@ -14,7 +14,7 @@ import modernmods.modernfoundry.library.tools.nbt.IToolStackView;
  * @param ifTrue     Iterator to use if the block matches the tag
  * @param ifFalse    Iterator to use if the block does not match the tag
  */
-public record ConditionalAOEIterator(IJsonPredicate<BlockState> condition, AreaOfEffectIterator.Loadable ifTrue, AreaOfEffectIterator.Loadable ifFalse) implements AreaOfEffectIterator.Loadable {
+public record ConditionalAOEIterator(IJsonPredicate<BlockState> condition, AreaOfEffectIterator.Loadable ifTrue, AreaOfEffectIterator.Loadable ifFalse) implements AreaOfEffectIterator.Loadable, SelectableAOEIterator {
   public static final RecordLoadable<ConditionalAOEIterator> LOADER = RecordLoadable.create(
     BlockPredicate.LOADER.requiredField("condition", ConditionalAOEIterator::condition),
     AreaOfEffectIterator.LOADER.requiredField("if_true", ConditionalAOEIterator::ifTrue),
@@ -24,6 +24,13 @@ public record ConditionalAOEIterator(IJsonPredicate<BlockState> condition, AreaO
   @Override
   public RecordLoadable<ConditionalAOEIterator> getLoader() {
     return LOADER;
+  }
+
+  @Override
+  public BoxAOEIterator selectionBox() {
+    if (ifFalse instanceof SelectableAOEIterator selectable) { return selectable.selectionBox(); }
+    if (ifTrue instanceof SelectableAOEIterator selectable) { return selectable.selectionBox(); }
+    return BoxAOEIterator.builder(0, 0, 0).build();
   }
 
   @Override

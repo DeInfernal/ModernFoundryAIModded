@@ -1,0 +1,42 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "polymorph"
+    }
+  ],
+  "type": "modernfoundry:crafting_fixed_material_tool",
+  "category": "equipment",
+  "pattern": [
+    "XSX",
+    "XXX",
+    " S "
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "modernfoundry:excavator",
+    "count": 1
+  },
+  "materials": [
+    "modernfoundry:iron",
+    "modernfoundry:wood",
+    "modernfoundry:wood",
+    "modernfoundry:wood"
+  ],
+  "modifiers": [
+    {
+      "name": "modernfoundry:diamond",
+      "level": 1
+    }
+  ],
+  "slots": {
+    "upgrades": 1
+  }
+}

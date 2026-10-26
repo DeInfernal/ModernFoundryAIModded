@@ -117,3 +117,63 @@ and Overslime consumption persist immediately on the item. Severing uses the
 normal recipe chances, and wither skeletons replace their bone drops with
 necrotic bones when `witherBoneDrop` is enabled (the default). Breaking casting
 tables or basins drops their stored cast and output inventory.
+
+### 4.2.0: mining modes, trees and Paxel
+
+Mining modes follow this order: `1×1`, `1×2`, `1×3+3×1` (a five-block plus),
+`3×3`, `3×3×3`, `5×3`, `5×5`, `5×5×5`, `7×7`, `9×9`.
+For tools starting at 1×1, Expanded I/II/III unlock through the plus/5×3/5×5×5.
+Tools starting at 3×3 unlock through 5×5/7×7/9×9. The selected mode is still
+stored on the individual item and switched with Shift + right-click in air.
+Vein Hammer keeps vein searching and gains five blocks of search distance per
+Expanded level. Broad Axe fells connected tree trunks and branches only when
+nonpersistent (naturally generated) leaves are found; bare logs and trees with
+only player-placed leaves fall back to the primary block. Tree scanning is bounded
+and does not load chunks.
+
+With Polymorph installed, the normal wooden, stone, iron and diamond
+pickaxe/axe/shovel/hoe/sword patterns also offer Modern Foundry results. Vanilla
+recipes remain available through Polymorph. Alternatives are pickaxe, hand axe,
+pickadze, kama and sword respectively, with wooden handles/bindings and the
+matching head material. In 4.2.0, diamond-pattern results use iron heads with the
+existing Diamond I modifier already applied, consuming one upgrade slot. There
+is no new diamond material and no golden alternative recipe. Gold retains only
+its pre-existing material support. Netherite smithing recipes are unchanged.
+
+Paxel (`modernfoundry:paxel`) combines a pick head, small axe head, adze head
+(the existing shovel component) and tool handle. Its four-part recipe needs an
+anvil. It mines pickaxe, axe and shovel blocks, starts at 1×1, and has no innate
+log stripping or path creation. It appears in the tool creative tab, station
+layouts and the English/Russian Mighty Smelting guide.
+
+Smeltery now requires the same complete frame/base rules as Foundry. A 1×1
+interior needs a solid 3×3 base, including the perimeter and corners.
+The materials stats command reports unsupported stat/material combinations as
+normal command errors rather than sending unencodable objects in system chat.
+
+Broad Axe has no selectable AOE modes, mode tooltip, extra-block outlines or
+area crack overlays. It always fells a natural tree (subject to the safety
+limits above) or harvests only the targeted block. Expanded does not expose
+rectangular modes on Broad Axe.
+
+### Additional 4.2.0 crafting-table recipes (Polymorph)
+
+Sledge Hammer, Excavator and Broad Axe each have wooden (logs), stone (smooth
+stone), iron (iron ingots) and diamond-pattern (diamonds) recipes. Diamond-pattern
+results use iron head parts with Diamond I and its normal one-upgrade-slot cost.
+Handles and bindings are wooden. In these patterns, `X` is the tier ingredient,
+`S` is a stick, and `-` is an empty slot:
+
+```text
+Sledge Hammer   Excavator   Broad Axe
+XXX             XSX         XXX
+XSX             XXX         XS-
+-S-             -S-         XS-
+```
+
+The vanilla bow pattern (three sticks and three strings) also offers a Modern
+Foundry longbow: both limbs and the grip are wood, and the bowstring is string.
+The vanilla arrow pattern (flint above stick above feather) also offers four
+Modern Foundry arrows with flint heads, wooden shafts and feather fletching.
+All these direct-crafting additions require Polymorph; vanilla bow and arrow
+results remain available through its result selector. The version remains 4.2.0.

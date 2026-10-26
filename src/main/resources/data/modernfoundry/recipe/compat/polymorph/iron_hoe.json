@@ -1,0 +1,32 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "polymorph"
+    }
+  ],
+  "type": "modernfoundry:crafting_fixed_material_tool",
+  "category": "equipment",
+  "pattern": [
+    "HH",
+    " S",
+    " S"
+  ],
+  "key": {
+    "H": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "modernfoundry:kama",
+    "count": 1
+  },
+  "materials": [
+    "modernfoundry:iron",
+    "modernfoundry:wood",
+    "modernfoundry:wood"
+  ]
+}
