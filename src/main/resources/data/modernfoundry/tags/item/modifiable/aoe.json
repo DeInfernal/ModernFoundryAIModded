@@ -24,6 +24,7 @@
       "required": false
     },
     "#modernfoundry:modifiable/armor/boots",
-    "modernfoundry:paxel"
+    "modernfoundry:paxel",
+    "modernfoundry:shovel"
   ]
 }

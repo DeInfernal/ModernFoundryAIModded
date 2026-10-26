@@ -13,6 +13,7 @@ public final class ToolDefinitions {
   public static final ToolDefinition VEIN_HAMMER = ToolDefinition.create(TinkerTools.veinHammer);
 
   // dirt
+  public static final ToolDefinition SHOVEL = ToolDefinition.create(TinkerTools.shovel);
   public static final ToolDefinition MATTOCK = ToolDefinition.create(TinkerTools.mattock);
   public static final ToolDefinition PICKADZE = ToolDefinition.create(TinkerTools.pickadze);
   public static final ToolDefinition EXCAVATOR = ToolDefinition.create(TinkerTools.excavator);

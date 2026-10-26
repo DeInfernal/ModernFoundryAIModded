@@ -20,6 +20,7 @@
       "required": false
     },
     "#modernfoundry:modifiable/interactable/dual",
-    "modernfoundry:paxel"
+    "modernfoundry:paxel",
+    "modernfoundry:shovel"
   ]
 }

@@ -3,7 +3,8 @@
   "parent": "modernfoundry:item/base/axe",
   "textures": {
     "shovel": "modernfoundry:item/tool/shovel/head",
-    "handle": "modernfoundry:item/tool/pickaxe/handle"
+    "handle": "modernfoundry:item/tool/pickaxe/handle",
+    "binding": "modernfoundry:item/tool/pickaxe/binding"
   },
   "modifier_maps": [
     "modernfoundry:shovel"
@@ -12,8 +13,18 @@
     "modernfoundry:item/tool/shovel/modifiers/"
   ],
   "parts": [
-    { "name": "shovel", "index": 0 },
-    { "name": "handle", "index": 1 }
+    {
+      "name": "handle",
+      "index": 1
+    },
+    {
+      "name": "shovel",
+      "index": 0
+    },
+    {
+      "name": "binding",
+      "index": 2
+    }
   ],
   "overrides": [
     {

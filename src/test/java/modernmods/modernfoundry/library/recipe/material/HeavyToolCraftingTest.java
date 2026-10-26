@@ -70,8 +70,23 @@ class HeavyToolCraftingTest extends ToolItemTest {
     assertThat(decode(bow).matches(bowInput,null)).isTrue();
     assertThat(bow.getAsJsonObject("result").get("id").getAsString()).isEqualTo("modernfoundry:longbow");
     var arrows=json("arrow");condition(arrows);
-    assertThat(arrows.getAsJsonObject("result").get("count").getAsInt()).isEqualTo(4);
+    assertThat(arrows.getAsJsonObject("result").get("count").getAsInt()).isEqualTo(8);
     assertThat(arrows.getAsJsonArray("materials").toString()).isEqualTo("[\"modernfoundry:flint\",\"modernfoundry:wood\",\"modernfoundry:feather\"]");
     assertThat(decode(arrows).matches(CraftingInput.of(1,3,List.of(new ItemStack(Items.FLINT),new ItemStack(Items.STICK),new ItemStack(Items.FEATHER))),null)).isTrue();
+  }
+  @Test void vanillaShovelPatternsCreateShovelsWithWoodenBindings() throws Exception {
+    for (String tier : new String[]{"wooden", "stone", "iron", "diamond"}) {
+      var data = json(tier + "_shovel");
+      condition(data);
+      assertThat(data.getAsJsonObject("result").get("id").getAsString()).isEqualTo("modernfoundry:shovel");
+      assertThat(data.getAsJsonArray("materials").get(1).getAsString()).isEqualTo("modernfoundry:wood");
+      assertThat(data.getAsJsonArray("materials").get(2).getAsString()).isEqualTo("modernfoundry:wood");
+      if (tier.equals("iron") || tier.equals("diamond")) {
+        var ingredient = tier.equals("iron") ? Items.IRON_INGOT : Items.DIAMOND;
+        var input = CraftingInput.of(1, 3, List.of(new ItemStack(ingredient), new ItemStack(Items.STICK), new ItemStack(Items.STICK)));
+        assertThat(decode(data).matches(input, null)).isTrue();
+        assertThat(decode(data).matches(CraftingInput.of(1, 3, List.of(new ItemStack(Items.DIRT), new ItemStack(Items.STICK), new ItemStack(Items.STICK))), null)).isFalse();
+      }
+    }
   }
 }

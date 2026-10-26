@@ -21,12 +21,12 @@
     }
   },
   "result": {
-    "id": "modernfoundry:pickadze",
+    "id": "modernfoundry:shovel",
     "count": 1
   },
   "materials": [
     "modernfoundry:iron",
     "modernfoundry:wood",
-    "modernfoundry:iron"
+    "modernfoundry:wood"
   ]
 }

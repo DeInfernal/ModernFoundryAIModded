@@ -166,3 +166,11 @@
 * Smeltery now requires a complete frame and base like Foundry, including floor perimeter and corners.
 * Added the four-part Paxel, assembled on an anvil from a pick head, small axe head, adze head and handle. It mines pickaxe/axe/shovel blocks without innate log stripping or path creation; includes models, tags, station layout, translations and guide pages.
 * Added fixed-material recipe modifier/slot synchronization and source-resource precedence over matching generated resources. Verified the build and 223 tests with no failures or skips.
+
+# v4.2.1
+* Added Shovel with three-part assembly (adze head, handle and binding), path creation, Expanded support, creative entry, modifier tags and English/Russian guide pages.
+* Replaced Pickadze outputs in all four Polymorph vanilla shovel alternatives with Shovel; handles and bindings are wood, and the diamond recipe retains an iron head with Diamond I and its upgrade-slot cost.
+* Integrated the supplied Paxel/Shovel artwork and modifier overlays; restored broken models, corrected Paxel material indices and registered client properties/colors for both tools.
+* Preserved the supplied Paxel slot positions and eight-arrow crafting output.
+* Delivered the verified 4.2.1 ZIP through storage.to after Litterbox upload errors; confirmed downloaded ZIP/JAR checksums match the build.
+* Prepared the verified 4.2.1 tool changes for publication to the development branch and the existing GitHub build/release workflow.

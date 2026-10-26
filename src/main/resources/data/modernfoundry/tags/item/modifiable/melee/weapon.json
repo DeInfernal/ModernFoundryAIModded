@@ -14,6 +14,7 @@
     "#modernfoundry:modifiable/melee/primary",
     "#modernfoundry:modifiable/melee/sword",
     "#modernfoundry:modifiable/melee/parry",
-    "modernfoundry:paxel"
+    "modernfoundry:paxel",
+    "modernfoundry:shovel"
   ]
 }

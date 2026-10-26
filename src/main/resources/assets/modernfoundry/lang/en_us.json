@@ -4218,6 +4218,7 @@
   "tooltip.modernfoundry.aoe_mode": "AOE: %s",
   "tooltip.modernfoundry.aoe_switch": "AOE modes (Shift + right-click in air)",
 "item.modernfoundry.paxel": "Paxel",
-"item.modernfoundry.paxel.description": "A four-part pickaxe, axe and shovel. Assemble on an anvil. Does not strip logs or create paths."
+"item.modernfoundry.paxel.description": "A four-part pickaxe, axe and shovel. Assemble on an anvil. Does not strip logs or create paths.",
+"item.modernfoundry.shovel": "Shovel",
+"item.modernfoundry.shovel.description": "A precise digging tool for dirt, sand, gravel and snow. Assembled from an adze head, tool handle and binding; can create paths."
 }
-

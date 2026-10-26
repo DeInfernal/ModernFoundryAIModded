@@ -3511,5 +3511,7 @@
   "tooltip.modernfoundry.aoe_mode": "Область: %s",
   "tooltip.modernfoundry.aoe_switch": "Режимы области (Shift + ПКМ в воздухе)",
 "item.modernfoundry.paxel": "Паксель",
-"item.modernfoundry.paxel.description": "Кирка, топор и лопата из четырёх деталей. Собирается на наковальне; не снимает кору и не создаёт тропинки."
+"item.modernfoundry.paxel.description": "Кирка, топор и лопата из четырёх деталей. Собирается на наковальне; не снимает кору и не создаёт тропинки.",
+"item.modernfoundry.shovel": "Лопата",
+"item.modernfoundry.shovel.description": "Инструмент для земли, песка, гравия и снега. Собирается из головки тесла, рукояти и крепления; создаёт тропинки."
 }

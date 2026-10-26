@@ -33,6 +33,7 @@
     "modernfoundry:plate_leggings",
     "modernfoundry:plate_boots",
     "#modernfoundry:modifiable/multipart/single",
-    "modernfoundry:paxel"
+    "modernfoundry:paxel",
+    "modernfoundry:shovel"
   ]
 }

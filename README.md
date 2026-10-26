@@ -39,7 +39,7 @@ This makes the foundry more than a single machine: it is a connected production 
 
 ### Tools for every job
 
-The current tool library covers mining, excavation, farming, combat, ranged combat, exploration, and utility. Examples include pickaxes, sledge hammers, vein hammers, mattocks, pickadzes, excavators, hand axes, broad axes, kamas, scythes, daggers, swords, cleavers, longbows, crossbows, fishing rods, javelins, arrows, shurikens, throwing axes, staffs, melting pans, war picks, battlesigns, and swashers.
+The current tool library covers mining, excavation, farming, combat, ranged combat, exploration, and utility. Examples include pickaxes, sledge hammers, vein hammers, mattocks, pickadzes, shovels, excavators, hand axes, broad axes, kamas, scythes, daggers, swords, cleavers, longbows, crossbows, fishing rods, javelins, arrows, shurikens, throwing axes, staffs, melting pans, war picks, battlesigns, and swashers.
 
 The bundle also includes modifiable shields, slime-themed armor, slime wings, crystalshot ammunition, and other equipment built on the same material-and-modifier systems.
 
@@ -173,7 +173,20 @@ XSX             XXX         XS-
 
 The vanilla bow pattern (three sticks and three strings) also offers a Modern
 Foundry longbow: both limbs and the grip are wood, and the bowstring is string.
-The vanilla arrow pattern (flint above stick above feather) also offers four
+The vanilla arrow pattern (flint above stick above feather) also offers eight
 Modern Foundry arrows with flint heads, wooden shafts and feather fletching.
 All these direct-crafting additions require Polymorph; vanilla bow and arrow
-results remain available through its result selector. The version remains 4.2.0.
+results remain available through its result selector.
+
+### 4.2.1: Shovel and custom tool textures
+
+Shovel is assembled in a Tinker Station or anvil from an adze head, tool handle
+and tool binding. It digs shovel blocks, creates paths and starts at 1×1, with
+the usual small-tool Expanded progression. Polymorph alternatives for the four
+vanilla shovel tiers now produce Shovel instead of Pickadze, with wooden handles
+and bindings. The diamond pattern produces an iron-headed Shovel with Diamond I
+and one upgrade slot consumed. Pickadze remains available through tool assembly.
+
+Paxel and Shovel use the new custom textures and modifier overlays, with working
+broken models and material indices matching their assembly parts. Existing
+Paxel part order and saved materials are preserved.

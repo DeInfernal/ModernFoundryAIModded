@@ -168,6 +168,7 @@ public final class TinkerTools extends TinkerModule {
   public static final ItemObject<ModifiableItem> sledgeHammer = ITEMS.register("sledge_hammer", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.SLEDGE_HAMMER));
   public static final ItemObject<ModifiableItem> veinHammer = ITEMS.register("vein_hammer", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.VEIN_HAMMER));
 
+  public static final ItemObject<ModifiableItem> shovel = ITEMS.register("shovel", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.SHOVEL));
   public static final ItemObject<ModifiableItem> mattock = ITEMS.register("mattock", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.MATTOCK));
   public static final ItemObject<ModifiableItem> pickadze = ITEMS.register("pickadze", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.PICKADZE));
   public static final ItemObject<ModifiableItem> excavator = ITEMS.register("excavator", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.EXCAVATOR));
@@ -375,6 +376,7 @@ public final class TinkerTools extends TinkerModule {
     // small tools
     acceptTool(output, pickaxe);
     acceptTool(output, paxel);
+    acceptTool(output, shovel);
     acceptTool(output, pickadze);
     acceptTool(output, mattock);
     acceptTool(output, handAxe);

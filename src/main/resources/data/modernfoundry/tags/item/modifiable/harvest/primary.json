@@ -16,6 +16,7 @@
       "id": "modernfoundry:minotaur_axe",
       "required": false
     },
-    "modernfoundry:paxel"
+    "modernfoundry:paxel",
+    "modernfoundry:shovel"
   ]
 }

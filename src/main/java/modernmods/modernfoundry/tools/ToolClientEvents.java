@@ -178,6 +178,8 @@ public class ToolClientEvents extends ClientEventBase {
       // properties
       // stone
       TinkerItemProperties.registerToolProperties(TinkerTools.pickaxe);
+      TinkerItemProperties.registerToolProperties(TinkerTools.paxel);
+      TinkerItemProperties.registerToolProperties(TinkerTools.shovel);
       TinkerItemProperties.registerToolProperties(TinkerTools.sledgeHammer);
       TinkerItemProperties.registerToolProperties(TinkerTools.veinHammer);
       // dirt
@@ -244,6 +246,8 @@ public class ToolClientEvents extends ClientEventBase {
     // tint modifiers
     // rock
     registerItemColors(colors, TinkerTools.pickaxe);
+    registerItemColors(colors, TinkerTools.paxel);
+    registerItemColors(colors, TinkerTools.shovel);
     registerItemColors(colors, TinkerTools.sledgeHammer);
     registerItemColors(colors, TinkerTools.veinHammer);
     // dirt

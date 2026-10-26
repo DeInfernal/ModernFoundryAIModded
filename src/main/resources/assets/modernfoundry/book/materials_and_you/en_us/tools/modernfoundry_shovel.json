@@ -1,0 +1,13 @@
+{
+  "tool": "modernfoundry:shovel",
+  "text": [
+    {
+      "text": "A precise digging tool for dirt, sand, gravel and snow. Assembled from an adze head, tool handle and binding; can create paths."
+    }
+  ],
+  "properties": [
+    "Three interchangeable parts",
+    "Creates paths",
+    "Starts at 1×1"
+  ]
+}
