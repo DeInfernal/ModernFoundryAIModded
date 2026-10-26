@@ -10,8 +10,8 @@
       },
       "icon": "modernfoundry:pick_head",
       "translation_key": "item.modernfoundry.pick_head",
-      "x": 53,
-      "y": 15
+      "x": 44,
+      "y": 29
     },
     {
       "filter": {
@@ -19,8 +19,8 @@
       },
       "icon": "modernfoundry:small_axe_head",
       "translation_key": "item.modernfoundry.small_axe_head",
-      "x": 33,
-      "y": 15
+      "x": 50,
+      "y": 48
     },
     {
       "filter": {
@@ -28,8 +28,8 @@
       },
       "icon": "modernfoundry:adze_head",
       "translation_key": "item.modernfoundry.adze_head",
-      "x": 53,
-      "y": 35
+      "x": 25,
+      "y": 20
     },
     {
       "filter": {
@@ -37,8 +37,8 @@
       },
       "icon": "modernfoundry:tool_handle",
       "translation_key": "item.modernfoundry.tool_handle",
-      "x": 15,
-      "y": 60
+      "x": 21,
+      "y": 52
     }
   ],
   "sortIndex": 10,
